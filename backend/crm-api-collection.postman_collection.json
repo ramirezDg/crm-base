@@ -1,0 +1,530 @@
+{
+    "info": {
+        "_postman_id": "crm-api-collection",
+        "name": "CRM API Collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": "Colección de endpoints principales para CRM NestJS."
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Registrar usuario",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/register"
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/login"
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/logout"
+                    }
+                },
+                {
+                    "name": "Refresh token",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/auth/refresh"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Crear usuario",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/users"
+                    }
+                },
+                {
+                    "name": "Listar usuarios",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/users"
+                    }
+                },
+                {
+                    "name": "Buscar usuarios",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/users/search"
+                    }
+                },
+                {
+                    "name": "Obtener usuario por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/users/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar usuario",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/users/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar usuario",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/users/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Roles",
+            "item": [
+                {
+                    "name": "Crear rol",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/roles"
+                    }
+                },
+                {
+                    "name": "Listar roles",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/roles"
+                    }
+                },
+                {
+                    "name": "Obtener rol por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/roles/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar rol",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/roles/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar rol",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/roles/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Permissions",
+            "item": [
+                {
+                    "name": "Crear permiso",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/permissions"
+                    }
+                },
+                {
+                    "name": "Listar permisos",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/permissions"
+                    }
+                },
+                {
+                    "name": "Obtener permiso por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/permissions/:id"
+                    }
+                },
+                {
+                    "name": "Buscar permisos",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/permissions/search"
+                    }
+                },
+                {
+                    "name": "Actualizar permiso",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/permissions/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar permiso",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/permissions/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Role-Permissions",
+            "item": [
+                {
+                    "name": "Asignar permiso a rol",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/role-permissions"
+                    }
+                },
+                {
+                    "name": "Listar relaciones",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/role-permissions"
+                    }
+                },
+                {
+                    "name": "Actualizar relación",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/role-permissions/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Clients",
+            "item": [
+                {
+                    "name": "Crear cliente",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/clients"
+                    }
+                },
+                {
+                    "name": "Listar clientes",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clients"
+                    }
+                },
+                {
+                    "name": "Buscar clientes",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clients/search"
+                    }
+                },
+                {
+                    "name": "Buscar cliente por email",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clients/by-email"
+                    }
+                },
+                {
+                    "name": "Obtener cliente por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/clients/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar cliente",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/clients/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar cliente",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/clients/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Companies",
+            "item": [
+                {
+                    "name": "Crear empresa",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/companies"
+                    }
+                },
+                {
+                    "name": "Listar empresas",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/companies"
+                    }
+                },
+                {
+                    "name": "Buscar empresas",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/companies/search"
+                    }
+                },
+                {
+                    "name": "Buscar empresa por email",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/companies/by-email"
+                    }
+                },
+                {
+                    "name": "Obtener empresa por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/companies/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar empresa",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/companies/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar empresa",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/companies/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Files",
+            "item": [
+                {
+                    "name": "Subir archivo",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/files/upload"
+                    }
+                },
+                {
+                    "name": "Listar archivos",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/files"
+                    }
+                },
+                {
+                    "name": "Obtener archivo por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/files/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar archivo",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/files/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Entities",
+            "item": [
+                {
+                    "name": "Crear entidad",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/entities"
+                    }
+                },
+                {
+                    "name": "Listar entidades",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/entities"
+                    }
+                },
+                {
+                    "name": "Obtener entidad por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/entities/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar entidad",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/entities/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar entidad",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/entities/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Entity Definitions",
+            "item": [
+                {
+                    "name": "Crear definición de entidad",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/entity-definitions"
+                    }
+                },
+                {
+                    "name": "Listar definiciones de entidad",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/entity-definitions"
+                    }
+                },
+                {
+                    "name": "Obtener definición por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/entity-definitions/:id"
+                    }
+                },
+                {
+                    "name": "Buscar definiciones",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/entity-definitions/search"
+                    }
+                },
+                {
+                    "name": "Actualizar definición",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/entity-definitions/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar definición",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/entity-definitions/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Custom Fields",
+            "item": [
+                {
+                    "name": "Crear campo personalizado",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/custom-fields"
+                    }
+                },
+                {
+                    "name": "Listar campos personalizados",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/custom-fields"
+                    }
+                },
+                {
+                    "name": "Obtener campo personalizado por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/custom-fields/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar campo personalizado",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/custom-fields/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar campo personalizado",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/custom-fields/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Custom Field Values",
+            "item": [
+                {
+                    "name": "Crear valor de campo personalizado",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/custom-field-values"
+                    }
+                },
+                {
+                    "name": "Listar valores de campos personalizados",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/custom-field-values"
+                    }
+                },
+                {
+                    "name": "Obtener valor por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/custom-field-values/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar valor",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/custom-field-values/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar valor",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/custom-field-values/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Activity Logs",
+            "item": [
+                {
+                    "name": "Crear log de actividad",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/activity-logs"
+                    }
+                },
+                {
+                    "name": "Listar logs de actividad",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/activity-logs"
+                    }
+                }
+            ]
+        }
+    ]
+}
