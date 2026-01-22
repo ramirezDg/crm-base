@@ -11,6 +11,7 @@ import {
   HttpStatus,
   UseGuards,
   Query,
+  Res,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
@@ -19,6 +20,9 @@ import { PermissionsGuard } from '../common/guards/permissions.guard';
 import { PermissionsDecorator } from '../common/decorators';
 import { PaginationParamsDto } from '../common/dto/pagination-params.dto';
 import { multerConfig } from './multer.config';
+import * as path from 'path';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 @Controller('files')
 @UseGuards(PermissionsGuard)
@@ -41,7 +45,14 @@ export class FilesController {
       size: file.size,
       path: file.path,
     };
-    return await this.filesService.create(fileDto);
+    try {
+      return await this.filesService.create(fileDto);
+    } catch (error) {
+      if (file && file.path && fs.existsSync(file.path)) {
+        fs.unlinkSync(file.path);
+      }
+      throw error;
+    }
   }
 
   @Get()
@@ -56,6 +67,24 @@ export class FilesController {
   @PermissionsDecorator('files.read')
   findOne(@Param('id') id: string) {
     return this.filesService.findOne(id);
+  }
+
+  @Get('download/:filename')
+  @HttpCode(HttpStatus.OK)
+  @PermissionsDecorator('files.download')
+  async downloadFile(@Query('id') id: string, @Res() res: Response) {
+    let file;
+    file = await this.filesService.findOne(id);
+    if (!file) {
+      return res.status(404).json({ message: 'Archivo no encontrado' });
+    }
+    const filePath = path.resolve(file.path);
+    const fileStream = await this.filesService.getFileStream(filePath);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${file.originalName}"`,
+    );
+    fileStream.pipe(res);
   }
 
   @Delete(':id')

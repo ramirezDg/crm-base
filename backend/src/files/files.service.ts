@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFileDto } from './dto/create-file.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
@@ -44,6 +44,13 @@ export class FilesService {
 
   findOne(id: string) {
     return this.filesRepository.findOne({ where: { id, deletedAt: IsNull() } });
+  }
+
+  async getFileStream(path: string): Promise<fs.ReadStream> {
+    if (!fs.existsSync(path)) {
+      throw new NotFoundException('Archivo no encontrado');
+    }
+    return fs.createReadStream(path);
   }
 
   remove(id: string) {

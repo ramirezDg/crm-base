@@ -29,6 +29,9 @@ export class Files {
   @Column()
   entityId: string;
 
+  @Column()
+  entityType: string;
+
   @Column({ nullable: true })
   checksum?: string;
 
