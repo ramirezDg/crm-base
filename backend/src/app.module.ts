@@ -16,6 +16,10 @@ import { ActivityLogInterceptor } from './common/interceptors/activity-log.inter
 import { CustomFieldValuesModule } from './custom-field-values/custom-field-values.module';
 import { EntitiesModule } from './entities/entities.module';
 import { AtGuard } from './common/guards';
+import { ErrorLogsModule } from './error-logs/error-logs.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { APP_FILTER } from '@nestjs/core';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -47,6 +51,8 @@ import { AtGuard } from './common/guards';
     ActivityLogsModule,
     CustomFieldValuesModule,
     EntitiesModule,
+    ErrorLogsModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -56,6 +62,10 @@ import { AtGuard } from './common/guards';
       provide: 'APP_GUARD',
       useClass: AtGuard,
     }, */
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class AppModule {}

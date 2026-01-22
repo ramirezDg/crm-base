@@ -81,6 +81,7 @@ export async function seedRolesAndPermissions(app: INestApplicationContext) {
     'customFieldValues.update',
     'customFieldValues.delete',
     'files.upload',
+    'files.download',
     'files.read',
     'files.delete',
     'activityLogs.read',
@@ -91,6 +92,11 @@ export async function seedRolesAndPermissions(app: INestApplicationContext) {
     'system.export',
     'system.import',
     'system.viewStats',
+    'errorLogs.create',
+    'errorLogs.read',
+    'errorLogs.read',
+    'errorLogs.update',
+    'errorLogs.delete',
   ];
 
   const permissionEntities: Permission[] = [];

@@ -5,7 +5,6 @@ import { AtGuard } from './common/guards';
 import { SwaggerModule } from '@nestjs/swagger';
 import { swaggerConfig } from './swagger.config';
 import { ActivityLogInterceptor } from './common/interceptors/activity-log.interceptor';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,7 +14,6 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/v1');
 
-  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(app.get(ActivityLogInterceptor));
 
   app.useGlobalPipes(
