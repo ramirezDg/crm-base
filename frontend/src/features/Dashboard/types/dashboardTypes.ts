@@ -1,0 +1,2 @@
+// dashboardTypes
+export type DashboardType = {};

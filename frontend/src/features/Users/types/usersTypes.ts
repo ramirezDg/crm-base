@@ -1,0 +1,2 @@
+// usersTypes
+export type UsersType = {};

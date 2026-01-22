@@ -1,0 +1,2 @@
+// authTypes
+export type AuthType = {};

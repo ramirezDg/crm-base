@@ -1,0 +1,2 @@
+// dashboardService
+export const dashboardService = {};
