@@ -24,15 +24,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   @PermissionsDecorator('users.create')
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  /* @PermissionsDecorator('users.read') */
+  @PermissionsDecorator('users.read')
   findAll(@Query() pagination: PaginationParamsDto) {
     return this.usersService.findAll(pagination);
   }

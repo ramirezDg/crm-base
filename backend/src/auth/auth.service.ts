@@ -6,31 +6,33 @@ import {
 } from '@nestjs/common';
 
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import * as bcryptjs from 'bcryptjs';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login-auth.dto';
 import { RegisterDto } from './dto/register-auth.dto';
-import { LogoutDto } from './dto/logout.auth.dto';
 import { JwtPayload, Tokens } from './types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RolePermission } from '../role-permissions/entities/role-permission.entity';
 import { Repository } from 'typeorm';
-
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
     @InjectRepository(RolePermission)
     private readonly rolePermissionRepository: Repository<RolePermission>,
   ) {}
 
   async getTokens(id: string, email: string) {
+    const jwtSecret =
+      this.configService.get<string>('JWT_SECRET') || 'default_secret_key';
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
         { sub: id, email },
         {
-          secret: process.env.JWT_SECRET,
+          secret: jwtSecret,
           expiresIn: '2h',
         },
       ),
@@ -38,7 +40,7 @@ export class AuthService {
       this.jwtService.signAsync(
         { sub: id, email },
         {
-          secret: process.env.JWT_SECRET,
+          secret: jwtSecret,
           expiresIn: '2h',
         },
       ),
@@ -114,11 +116,16 @@ export class AuthService {
       permissions,
     };
 
+    const jwtSecret =
+      this.configService.get<string>('JWT_SECRET') || 'default_secret_key';
+
     const accessToken = await this.jwtService.signAsync(payload, {
+      secret: jwtSecret,
       expiresIn: '2h',
     });
 
     const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: jwtSecret,
       expiresIn: '2h',
     });
 
@@ -131,7 +138,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       name: `${user.name} ${user.lastName}`,
-      permissions,
+      /* permissions, */
     };
   }
 

@@ -41,7 +41,7 @@ export class ActivityLogsService {
     });
     try {
       const savedLog = await this.activityLogRepository.save(log);
-      // console.log('Log guardado:', savedLog);
+      // log('Log guardado:', savedLog);
       return savedLog;
     } catch (error) {
       console.error('Error al guardar log:', error);

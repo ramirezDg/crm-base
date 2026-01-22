@@ -16,10 +16,11 @@ export class PermissionsGuard implements CanActivate {
       PERMISSIONS_KEY,
       [context.getHandler(), context.getClass()],
     );
+
+    const { user } = context.switchToHttp().getRequest();
     if (!requiredPermissions) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
     if (!user || !Array.isArray(user.permissions)) {
       throw new ForbiddenException(
         'You do not have permission to access this resource.',
