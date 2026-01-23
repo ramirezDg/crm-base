@@ -59,16 +59,39 @@ export async function seedModulesFromTables() {
       where: { name: formattedName },
     });
     if (!exists) {
-      const uniquePath = generateUniquePath(table.table_name, usedPaths);
-      const module = moduleRepo.create({
+      // Padre
+      const parentPath = generateUniquePath(table.table_name, usedPaths);
+      const parentModule = moduleRepo.create({
         name: formattedName,
         description: `Module ${formattedName}`,
-        path: uniquePath,
+        path: parentPath,
         icon: 'icon',
         status: true,
         parent: undefined,
       });
-      await moduleRepo.save(module);
+      const savedParent = await moduleRepo.save(parentModule);
+
+      // Hijo: Custom {formattedName}
+      const customChild = moduleRepo.create({
+        name: `Custom ${formattedName}`,
+        description: `Personalización de ${formattedName}`,
+        path: parentPath + '/custom',
+        icon: 'icon',
+        status: true,
+        parent: savedParent,
+      });
+      await moduleRepo.save(customChild);
+
+      // Hijo: List {formattedName}
+      const listChild = moduleRepo.create({
+        name: `List ${formattedName}`,
+        description: `Listado de ${formattedName}`,
+        path: parentPath + '/list',
+        icon: 'icon',
+        status: true,
+        parent: savedParent,
+      });
+      await moduleRepo.save(listChild);
     }
   }
 

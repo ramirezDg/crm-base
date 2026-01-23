@@ -33,8 +33,8 @@ export class ModulesController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @PermissionsDecorator('modules.read')
-  findAll(@Query() pagination: PaginationParamsDto) {
-    return this.modulesService.findAll(pagination);
+  findAll() {
+    return this.modulesService.findAll();
   }
 
   @Get(':id')

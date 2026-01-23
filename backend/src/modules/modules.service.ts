@@ -4,8 +4,6 @@ import { UpdateModuleDto } from './dto/update-module.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ModulesUser } from './entities/module.entity';
 import { IsNull, Repository } from 'typeorm';
-import { PaginationParamsDto } from '../common/dto/pagination-params.dto';
-import { PaginatedDto } from '../common/dto/paginated.dto';
 
 @Injectable()
 export class ModulesService {
@@ -19,23 +17,26 @@ export class ModulesService {
     return await this.modulesRepository.save(moduleUser);
   }
 
-  async findAll(
-    pagination: PaginationParamsDto,
-  ): Promise<PaginatedDto<ModulesUser>> {
-    const { offset = 0, limit = 10 } = pagination;
-
-    const [results, total] = await this.modulesRepository.findAndCount({
+  async findAll(): Promise<ModulesUser[]> {
+    const modules = await this.modulesRepository.find({
       where: { deletedAt: IsNull() },
-      skip: offset,
-      take: limit,
+      relations: ['parent', 'children'],
+      order: { name: 'ASC' },
     });
 
-    return {
-      total,
-      limit,
-      offset,
-      results,
-    };
+    const parents = modules.filter((m) => !m.parent);
+
+    return parents.map((parent) => ({
+      ...parent,
+      parentId: null,
+      children: modules
+        .filter((child) => child.parent && child.parent.id === parent.id)
+        .map((child) => ({
+          ...child,
+          parentId: parent.id,
+          children: [],
+        })),
+    }));
   }
 
   findOne(id: string) {
