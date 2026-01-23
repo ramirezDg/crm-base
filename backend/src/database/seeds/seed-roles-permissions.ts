@@ -97,6 +97,10 @@ export async function seedRolesAndPermissions(app: INestApplicationContext) {
     'errorLogs.read',
     'errorLogs.update',
     'errorLogs.delete',
+    'modules.create',
+    'modules.read',
+    'modules.update',
+    'modules.delete',
   ];
 
   const permissionEntities: Permission[] = [];

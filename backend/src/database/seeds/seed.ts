@@ -7,6 +7,7 @@ import { Role } from '../../roles/entities/role.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { seedRolesAndPermissions } from './seed-roles-permissions';
+import { seedModulesFromTables } from './seed-modules-users';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -73,6 +74,9 @@ async function bootstrap() {
   }
 
   console.log('Seed de SuperAdmin completado');
+
+  await seedModulesFromTables();
+
   await app.close();
 }
 

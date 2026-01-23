@@ -20,6 +20,7 @@ import { ErrorLogsModule } from './error-logs/error-logs.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { FilesModule } from './files/files.module';
+import { ModulesModule } from './modules/modules.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { FilesModule } from './files/files.module';
     EntitiesModule,
     ErrorLogsModule,
     FilesModule,
+    ModulesModule,
   ],
   controllers: [AppController],
   providers: [
