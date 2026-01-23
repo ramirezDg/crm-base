@@ -1,0 +1,2 @@
+// companiesTypes
+export type CompaniesType = {};

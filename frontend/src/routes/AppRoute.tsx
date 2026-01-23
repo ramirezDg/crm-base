@@ -2,8 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PublicRoute from './PublicRoute'
 import PrivateRoute from './PrivateRoute'
 import { lazy } from 'react'
-import { Suspense } from 'react'
-import AppSkeleton from '../components/skeletons/AppSkeleton'
 import AppLayout from '../layouts/AppLayout'
 import Seo from '../components/Seo'
 
@@ -16,41 +14,47 @@ export default function AppRouter() {
         <BrowserRouter>
             <Routes>
                 <Route element={<PublicRoute />}>
+                    <Route
+                        path='/login'
+                        element={
+                            <>
+                                <Seo title='Login | CRM' description='Inicia sesión en el CRM' />
+                                <Login />
+                            </>
+                        }
+                    />
                     <Route path='/login' element={<Login />} />
                 </Route>
-                <Route element={<PublicRoute />}>
-                    <Route element={<PublicRoute />}>
-                        <Route element={<AppLayout />}>
-                            {/* Home */}
-                            <Route
-                                path='/home'
-                                element={
-                                    <>
-                                        <Seo
-                                            title='Home | CRM'
-                                            description='Página principal del CRM'
-                                        />
-                                        <Home />
-                                    </>
-                                }
-                            />
+                <Route element={<PrivateRoute />}>
+                    <Route element={<AppLayout />}>
+                        {/* Home */}
+                        <Route
+                            path='/home'
+                            element={
+                                <>
+                                    <Seo
+                                        title='Home | CRM'
+                                        description='Página principal del CRM'
+                                    />
+                                    <Home />
+                                </>
+                            }
+                        />
 
-                            {/* Dashboard */}
-                            <Route
-                                path='/dashboard'
-                                element={
-                                    <>
-                                        <Seo
-                                            title='Dashboard | CRM'
-                                            description='Panel de control del CRM'
-                                        />
-                                        <Dashboard />
-                                    </>
-                                }
-                            />
-                        </Route>
+                        {/* Dashboard */}
+                        <Route
+                            path='/dashboard'
+                            element={
+                                <>
+                                    <Seo
+                                        title='Dashboard | CRM'
+                                        description='Panel de control del CRM'
+                                    />
+                                    <Dashboard />
+                                </>
+                            }
+                        />
                     </Route>
-                    <Route path='/dashboard' element={<Dashboard />} />
                 </Route>
             </Routes>
         </BrowserRouter>

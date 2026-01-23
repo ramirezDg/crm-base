@@ -1,6 +1,4 @@
-'use client'
-
-import * as React from 'react'
+import { TeamSwitcher } from '../../../components/team-switcher/team-switcher'
 import {
     AudioWaveform,
     BookOpen,
@@ -14,19 +12,6 @@ import {
     SquareTerminal,
 } from 'lucide-react'
 
-import { NavMain } from '@/components/nav/nav-main'
-import { NavProjects } from '@/components/nav/nav-projects'
-import { NavUser } from '@/components/nav/nav-user'
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarRail,
-} from '@/components/ui/sidebar'
-import { CompaniesComponent } from '../../features/Companies/components/CompaniesComponent'
-
-// This is sample data.
 const data = {
     user: {
         name: 'shadcn',
@@ -156,23 +141,6 @@ const data = {
     ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    return (
-        <Sidebar collapsible='icon' {...props}>
-            <SidebarHeader>
-                <CompaniesComponent />
-                {/* <div className='flex justify-between items-center gap-2 px-4 py-3 -mb-6'>
-                    <div className='text-lg font-semibold'>CRM Base</div>
-                </div> */}
-            </SidebarHeader>
-            <SidebarContent>
-                <NavMain items={data.navMain} />
-                <NavProjects projects={data.projects} />
-            </SidebarContent>
-            <SidebarFooter>
-                <NavUser user={data.user} />
-            </SidebarFooter>
-            <SidebarRail />
-        </Sidebar>
-    )
+export function CompaniesComponent() {
+    return <TeamSwitcher teams={data.teams} />
 }

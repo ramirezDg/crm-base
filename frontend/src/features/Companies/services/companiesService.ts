@@ -1,0 +1,2 @@
+// companiesService
+export const companiesService = {};
