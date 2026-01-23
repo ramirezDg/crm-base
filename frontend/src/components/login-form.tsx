@@ -4,16 +4,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '../features/Auth/hooks/useAuth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { LoginPayload } from '../features/Auth/types/authTypes'
 import { useAlert } from './alert-context'
+import { useNavigate } from 'react-router-dom'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
     const { showAlert } = useAlert()
+    const navigate = useNavigate()
 
     const formInitialState: LoginPayload = { email: '', password: '' }
 
-    const { login, isAuthenticated, loading, error } = useAuth()
+    const { login, isAuthenticated, loading } = useAuth()
     const [form, setForm] = useState<LoginPayload>(formInitialState)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +43,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
             })
         }
     }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/home', { replace: true })
+        }
+    }, [isAuthenticated, navigate])
 
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
@@ -83,13 +91,6 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                                     disabled={loading}
                                 />
                             </Field>
-                            {/* {error && (
-                                <Field>
-                                    <div className='text-red-500 text-center text-sm mb-2'>
-                                        {error}
-                                    </div>
-                                </Field>
-                            )} */}
                             <Field>
                                 <Button type='submit' onClick={handleSubmit} disabled={loading}>
                                     {loading ? 'Cargando...' : 'Login'}
