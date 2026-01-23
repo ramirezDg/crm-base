@@ -15,7 +15,6 @@ import {
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav/nav-main'
-import { NavProjects } from '@/components/nav/nav-projects'
 import { NavUser } from '@/components/nav/nav-user'
 import {
     Sidebar,
@@ -25,6 +24,9 @@ import {
     SidebarRail,
 } from '@/components/ui/sidebar'
 import { CompaniesComponent } from '../../features/Companies/components/CompaniesComponent'
+import { useUserModulesStore } from '../../store/useUserModulesStore'
+import { getIconByName } from '../icons/icon-map'
+import { type LucideIcon } from 'lucide-react'
 
 // This is sample data.
 const data = {
@@ -157,17 +159,27 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { modules, loading } = useUserModulesStore()
+    const modulesPaseData = modules.map(mod => ({
+        title: mod.name,
+        url: mod.path,
+        icon: getIconByName(mod.icon) as LucideIcon | undefined,
+        isActive: false,
+        items: mod.children
+            ? mod.children.map(child => ({
+                  title: child.name,
+                  url: child.path,
+              }))
+            : [],
+    }))
+
     return (
         <Sidebar collapsible='icon' {...props}>
             <SidebarHeader>
                 <CompaniesComponent />
-                {/* <div className='flex justify-between items-center gap-2 px-4 py-3 -mb-6'>
-                    <div className='text-lg font-semibold'>CRM Base</div>
-                </div> */}
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
-                <NavProjects projects={data.projects} />
+                <NavMain items={modulesPaseData} />
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />

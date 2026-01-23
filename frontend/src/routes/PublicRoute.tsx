@@ -3,7 +3,7 @@ import { useAuthStore } from '../store/useAuthStore'
 
 function PublicRoute() {
     const isAuthenticated = useAuthStore(state => state.isAuthenticated)
-    return !isAuthenticated ? <Outlet /> : <Navigate to='/home' />
+    return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
 export default PublicRoute

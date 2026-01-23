@@ -8,9 +8,11 @@ import { useEffect, useState } from 'react'
 import type { LoginPayload } from '../features/Auth/types/authTypes'
 import { useAlert } from './alert-context'
 import { useNavigate } from 'react-router-dom'
+import { useUserModules } from '../features/UserModules/hooks/useUserModules'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
     const { showAlert } = useAlert()
+    const { usersModules, loading: loadingModules, getUserModules } = useUserModules()
     const navigate = useNavigate()
 
     const formInitialState: LoginPayload = { email: '', password: '' }
@@ -46,7 +48,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
 
     useEffect(() => {
         if (isAuthenticated) {
-            navigate('/home', { replace: true })
+            getUserModules()
+            navigate('/', { replace: true })
         }
     }, [isAuthenticated, navigate])
 
