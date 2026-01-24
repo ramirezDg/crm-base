@@ -1,13 +1,10 @@
 import { ChartAreaInteractive } from '@/components/chart-area-interactive'
-import { DataTable } from '@/components/table/data-table'
 import { SectionCards } from '@/components/section-cards'
 
 import data from '../../../app/dashboard/data.json'
 import { schemaDashboard } from '../types/dashboardTypes'
 import type { ColumnDef } from '@tanstack/react-table'
-import { DragHandle } from '../../../components/table/DragHandle'
 import { Checkbox } from '@radix-ui/react-checkbox'
-import { TableCellViewer } from '../../../components/table/TableCellViewer'
 import { Badge } from '../../../components/ui/badge'
 import { IconCircleCheckFilled, IconDotsVertical, IconLoader } from '@tabler/icons-react'
 import { toast } from 'sonner'
@@ -28,12 +25,13 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 import { Button } from '../../../components/ui/button'
 import type z from 'zod'
+import { AbstractDataTable, DragHandle } from '../../../components/table/AbstractDataTable'
 export default function Dashboard() {
     const columns: ColumnDef<z.infer<typeof schemaDashboard>>[] = [
         {
             id: 'drag',
             header: () => null,
-            cell: ({ row }) => <DragHandle id={row.original.id} />,
+            cell: ({ row }) => <DragHandle id={String(row.original.id)} />,
         },
         {
             id: 'select',
@@ -212,7 +210,7 @@ export default function Dashboard() {
             <div className='px-4 lg:px-6'>
                 <ChartAreaInteractive />
             </div>
-            <DataTable data={data} schema={schemaDashboard} columns={columns} />
+            <AbstractDataTable data={data} schema={schemaDashboard} columns={columns} />
         </>
     )
 }

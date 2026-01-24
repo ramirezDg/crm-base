@@ -1,101 +1,175 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../../app.module';
-import { getRepositoryToken, getDataSourceToken } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { ModulesUser } from '../../modules/entities/module.entity';
 
-function formatModuleName(tableName: string): string {
-  return tableName.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-}
-
-function generateUniquePath(tableName: string, usedPaths: Set<string>): string {
-  const words = tableName.replace(/[-_]/g, ' ').split(' ').filter(Boolean);
-  for (let len = 2; len <= Math.max(...words.map((w) => w.length)); len++) {
-    let candidate =
-      '/' + words.map((w) => w.substring(0, len).toLowerCase()).join('');
-    if (!usedPaths.has(candidate)) {
-      usedPaths.add(candidate);
-      return candidate;
-    }
-  }
-  let extra = 1;
-  while (true) {
-    let candidate =
-      '/' +
-      words
-        .map((w, i) =>
-          i === words.length - 1
-            ? w.toLowerCase() + extra
-            : w.substring(0, 2).toLowerCase(),
-        )
-        .join('');
-    if (!usedPaths.has(candidate)) {
-      usedPaths.add(candidate);
-      return candidate;
-    }
-    extra++;
-  }
-}
-
 export async function seedModulesFromTables() {
-  const usedPaths = new Set<string>();
   const app = await NestFactory.createApplicationContext(AppModule);
   const moduleRepo = app.get<Repository<ModulesUser>>(
     getRepositoryToken(ModulesUser),
   );
-  const dataSource = app.get<DataSource>(getDataSourceToken());
 
-  const tableNames = await dataSource.query(`
-    SELECT table_name
-    FROM information_schema.tables
-    WHERE table_schema = 'public'
-      AND table_type = 'BASE TABLE'
-      AND table_name NOT IN ('migrations', 'modules')
-  `);
+  const moduleGroups = [
+    {
+      name: 'Records',
+      icon: 'activity',
+      children: [
+        {
+          name: 'Activity Logs',
+          description: 'Module Activity Logs',
+          path: '/aclo',
+          icon: 'activity',
+        },
+        {
+          name: 'Error Logs',
+          description: 'Module Error Logs',
+          path: '/erlo',
+          icon: 'bug',
+        },
+      ],
+    },
+    {
+      name: 'Entities',
+      icon: 'box',
+      children: [
+        {
+          name: 'Entities',
+          description: 'Module Entities',
+          path: '/en',
+          icon: 'box',
+        },
+        {
+          name: 'Entity Definition',
+          description: 'Module Entity Definition',
+          path: '/ende',
+          icon: 'filebox',
+        },
+      ],
+    },
+    {
+      name: 'Custom Fields',
+      icon: 'tag',
+      children: [
+        {
+          name: 'Custom Field',
+          description: 'Module Custom Field',
+          path: '/cufi',
+          icon: 'tag',
+        },
+        {
+          name: 'Custom Field Value',
+          description: 'Module Custom Field Value',
+          path: '/cufiva',
+          icon: 'hash',
+        },
+      ],
+    },
+    {
+      name: 'Security and Access',
+      icon: 'shielduser',
+      children: [
+        {
+          name: 'Users',
+          description: 'Module Users',
+          path: '/us',
+          icon: 'users',
+        },
+        {
+          name: 'Role',
+          description: 'Module Role',
+          path: '/ro',
+          icon: 'shielduser',
+        },
+        {
+          name: 'Permission',
+          description: 'Module Permission',
+          path: '/pe',
+          icon: 'userlock',
+        },
+        {
+          name: 'Role Permission',
+          description: 'Module Role Permission',
+          path: '/rope',
+          icon: 'shieldhalf',
+        },
+      ],
+    },
+    {
+      name: 'Companies',
+      icon: 'factory',
+      children: [
+        {
+          name: 'Companies',
+          description: 'Module Companies',
+          path: '/co',
+          icon: 'factory',
+        },
+      ],
+    },
+    {
+      name: 'Clients',
+      icon: 'handshake',
+      children: [
+        {
+          name: 'Client',
+          description: 'Module Client',
+          path: '/cl',
+          icon: 'handshake',
+        },
+      ],
+    },
+    {
+      name: 'Files',
+      icon: 'paperclip',
+      children: [
+        {
+          name: 'Files',
+          description: 'Module Files',
+          path: '/fi',
+          icon: 'paperclip',
+        },
+      ],
+    },
+  ];
 
-  for (const table of tableNames) {
-    const formattedName = formatModuleName(table.table_name);
-    const exists = await moduleRepo.findOne({
-      where: { name: formattedName },
+  await moduleRepo
+    .createQueryBuilder()
+    .delete()
+    .where('parentId IS NOT NULL')
+    .execute();
+
+  for (const group of moduleGroups) {
+    let parentModule = await moduleRepo.findOne({
+      where: { name: group.name },
     });
-    if (!exists) {
-      // Padre
-      const parentPath = generateUniquePath(table.table_name, usedPaths);
-      const parentModule = moduleRepo.create({
-        name: formattedName,
-        description: `Module ${formattedName}`,
-        path: parentPath,
-        icon: 'icon',
+    if (!parentModule) {
+      parentModule = moduleRepo.create({
+        name: group.name,
+        description: `Agrupador de ${group.name}`,
+        path: '',
+        icon: group.icon,
         status: true,
         parent: undefined,
       });
-      const savedParent = await moduleRepo.save(parentModule);
+      parentModule = await moduleRepo.save(parentModule);
+    }
 
-      // Hijo: Custom {formattedName}
-      const customChild = moduleRepo.create({
-        name: `Custom ${formattedName}`,
-        description: `Personalización de ${formattedName}`,
-        path: parentPath + '/custom',
-        icon: 'icon',
+    for (const child of group.children) {
+      // Siempre crear el hijo, ya que los antiguos fueron eliminados
+      const childModule = moduleRepo.create({
+        name: child.name,
+        description: child.description,
+        path: child.path,
+        icon: child.icon,
         status: true,
-        parent: savedParent,
+        parent: parentModule,
       });
-      await moduleRepo.save(customChild);
-
-      // Hijo: List {formattedName}
-      const listChild = moduleRepo.create({
-        name: `List ${formattedName}`,
-        description: `Listado de ${formattedName}`,
-        path: parentPath + '/list',
-        icon: 'icon',
-        status: true,
-        parent: savedParent,
-      });
-      await moduleRepo.save(listChild);
+      await moduleRepo.save(childModule);
     }
   }
 
-  console.log('Seed de módulos desde tablas completado');
+  console.log('Seed de módulos agrupados completado');
   await app.close();
 }
 

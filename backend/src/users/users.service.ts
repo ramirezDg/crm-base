@@ -34,6 +34,7 @@ export class UsersService {
       where: { deletedAt: IsNull() },
       skip: offset,
       take: limit,
+      relations: ['role', 'company'],
     });
 
     return {

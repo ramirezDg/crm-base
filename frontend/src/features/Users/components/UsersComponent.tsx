@@ -1,5 +1,4 @@
-import { IconDotsVertical, IconGripVertical } from '@tabler/icons-react'
-import { useSortable } from '@dnd-kit/sortable'
+import { IconDotsVertical } from '@tabler/icons-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '../../../components/ui/button'
 import { UsersSuuTableSchema, type UsersSuuTableType } from '../types/usersTypes'
@@ -25,7 +24,7 @@ export default function Users() {
         {
             id: 'select',
             header: ({ table }) => (
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center -ml-4'>
                     <Checkbox
                         checked={
                             table.getIsAllPageRowsSelected() ||
@@ -37,7 +36,7 @@ export default function Users() {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center -ml-4 mr-1'>
                     <Checkbox
                         checked={row.getIsSelected()}
                         onCheckedChange={value => row.toggleSelected(!!value)}
@@ -103,12 +102,18 @@ export default function Users() {
         },
     ]
     return (
-        <AbstractDataTable<UsersSuuTableType>
-            data={users?.results}
-            schema={UsersSuuTableSchema}
-            columns={columns}
-            loading={loading}
-            error={error}
-        />
+        <div className='flex flex-1 flex-col'>
+            <div className='@container/main flex flex-1 flex-col gap-2'>
+                <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>
+                    <AbstractDataTable<UsersSuuTableType>
+                        data={users?.results}
+                        schema={UsersSuuTableSchema}
+                        columns={columns}
+                        loading={loading}
+                        error={error}
+                    />
+                </div>
+            </div>
+        </div>
     )
 }

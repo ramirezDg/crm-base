@@ -44,33 +44,11 @@ export default function AppRouter() {
                             path='/us'
                             element={
                                 <>
-                                    <Seo title='Users | CRM' description='Users page' />
-                                    <Outlet />
+                                    <Seo title='Users List | CRM' description='Users page' />
+                                    <Users />
                                 </>
                             }
-                        >
-                            <Route
-                                path='list'
-                                element={
-                                    <>
-                                        <Seo title='Users List | CRM' description='Users page' />
-                                        <Users />
-                                    </>
-                                }
-                            />
-                            <Route
-                                path='custom'
-                                element={
-                                    <>
-                                        <Seo
-                                            title='Custom Users | CRM'
-                                            description='User management'
-                                        />
-                                        <h1>Users</h1>
-                                    </>
-                                }
-                            />
-                        </Route>
+                        ></Route>
                         {/* Permission */}
                         <Route
                             path='/pe'
