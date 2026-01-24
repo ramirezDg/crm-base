@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import PublicRoute from './PublicRoute'
 import PrivateRoute from './PrivateRoute'
 import { lazy } from 'react'
@@ -6,8 +6,8 @@ import AppLayout from '../layouts/AppLayout'
 import Seo from '../components/Seo'
 
 const Home = lazy(() => import('../pages/Home'))
-const Dashboard = lazy(() => import('../features/Dashboard/components/Dashboard'))
 const Login = lazy(() => import('../features/Auth/components/Login'))
+const Users = lazy(() => import('../features/Users/components/UsersComponent'))
 
 export default function AppRouter() {
     return (
@@ -23,7 +23,6 @@ export default function AppRouter() {
                             </>
                         }
                     />
-                    <Route path='/login' element={<Login />} />
                 </Route>
                 <Route element={<PrivateRoute />}>
                     <Route element={<AppLayout />}>
@@ -46,7 +45,7 @@ export default function AppRouter() {
                             element={
                                 <>
                                     <Seo title='Users | CRM' description='Users page' />
-                                    {/* Main Users component goes here */}
+                                    <Outlet />
                                 </>
                             }
                         >
@@ -55,7 +54,7 @@ export default function AppRouter() {
                                 element={
                                     <>
                                         <Seo title='Users List | CRM' description='Users page' />
-                                        <h1>Users</h1>
+                                        <Users />
                                     </>
                                 }
                             />

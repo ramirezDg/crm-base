@@ -3,3 +3,4 @@ export type dataDateAtAtributes = {
     updatedAt?: string
     deletedAt?: string | null
 }
+

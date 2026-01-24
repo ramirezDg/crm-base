@@ -159,7 +159,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { modules, loading } = useUserModulesStore()
+    const { modules } = useUserModulesStore()
     const modulesPaseData = modules.map(mod => ({
         title: mod.name,
         url: mod.path,
