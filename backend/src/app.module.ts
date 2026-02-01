@@ -1,26 +1,24 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { CompaniesModule } from './companies/companies.module';
-import { RolesModule } from './roles/roles.module';
-import { PermissionsModule } from './permissions/permissions.module';
-import { RolePermissionsModule } from './role-permissions/role-permissions.module';
-import { ClientsModule } from './clients/clients.module';
-import { EntityDefinitionsModule } from './entity-definitions/entity-definitions.module';
-import { ActivityLogsModule } from './activity-logs/activity-logs.module';
+import { AuthModule } from './api/auth/auth.module';
+import { CompaniesModule } from './api/companies/companies.module';
+import { RolesModule } from './api/roles/roles.module';
+import { PermissionsModule } from './api/permissions/permissions.module';
+import { RolePermissionsModule } from './api/role-permissions/role-permissions.module';
+import { ClientsModule } from './api/clients/clients.module';
+import { EntityDefinitionsModule } from './api/entity-definitions/entity-definitions.module';
+import { ActivityLogsModule } from './api/activity-logs/activity-logs.module';
 import { ActivityLogInterceptor } from './common/interceptors/activity-log.interceptor';
-import { CustomFieldValuesModule } from './custom-field-values/custom-field-values.module';
-import { EntitiesModule } from './entities/entities.module';
+import { CustomFieldValuesModule } from './api/custom-field-values/custom-field-values.module';
+import { EntitiesModule } from './api/entities/entities.module';
 import { AtGuard } from './common/guards';
-import { ErrorLogsModule } from './error-logs/error-logs.module';
+import { ErrorLogsModule } from './api/error-logs/error-logs.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { APP_FILTER } from '@nestjs/core';
-import { FilesModule } from './files/files.module';
-import { ModulesModule } from './modules/modules.module';
+import { FilesModule } from './api/files/files.module';
+import { ModulesModule } from './api/modules/modules.module';
+import { UsersModule } from './api/users/users.module';
 
 @Module({
   imports: [
@@ -56,9 +54,8 @@ import { ModulesModule } from './modules/modules.module';
     FilesModule,
     ModulesModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     ActivityLogInterceptor,
     /* {
       provide: 'APP_GUARD',

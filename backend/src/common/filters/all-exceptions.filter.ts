@@ -6,7 +6,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ErrorLogsService } from '../../error-logs/error-logs.service';
+import { ErrorLogsService } from '../../api/error-logs/error-logs.service';
 
 @Injectable()
 @Catch()

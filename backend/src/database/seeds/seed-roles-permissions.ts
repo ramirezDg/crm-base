@@ -1,8 +1,8 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Role } from '../../roles/entities/role.entity';
-import { Permission } from '../../permissions/entities/permission.entity';
-import { RolePermission } from '../../role-permissions/entities/role-permission.entity';
-import { Company } from '../../companies/entities/company.entity';
+import { Role } from '../../api/roles/entities/role.entity';
+import { Permission } from '../../api/permissions/entities/permission.entity';
+import { RolePermission } from '../../api/role-permissions/entities/role-permission.entity';
+import { Company } from '../../api/companies/entities/company.entity';
 import { Repository } from 'typeorm';
 import { INestApplicationContext } from '@nestjs/common';
 

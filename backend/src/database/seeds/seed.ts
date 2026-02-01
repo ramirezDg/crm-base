@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../../app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Users } from '../../users/entities/user.entity';
-import { Company } from '../../companies/entities/company.entity';
-import { Role } from '../../roles/entities/role.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { seedRolesAndPermissions } from './seed-roles-permissions';
 import { seedModulesFromTables } from './seed-modules-users';
+import { Company } from '../../api/companies/entities/company.entity';
+import { Role } from '../../api/roles/entities/role.entity';
+import { Users } from '../../api/users/entities/user.entity';
+
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);

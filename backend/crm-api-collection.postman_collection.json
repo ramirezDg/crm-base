@@ -525,6 +525,79 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Error Logs",
+            "item": [
+                {
+                    "name": "Crear log de error",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/error-logs"
+                    }
+                },
+                {
+                    "name": "Listar logs de error",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/error-logs"
+                    }
+                },
+                {
+                    "name": "Obtener log de error por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/error-logs/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar log de error",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/error-logs/:id"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Modules",
+            "item": [
+                {
+                    "name": "Crear módulo",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/modules"
+                    }
+                },
+                {
+                    "name": "Listar módulos",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/modules"
+                    }
+                },
+                {
+                    "name": "Obtener módulo por id",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/modules/:id"
+                    }
+                },
+                {
+                    "name": "Actualizar módulo",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/modules/:id"
+                    }
+                },
+                {
+                    "name": "Eliminar módulo",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{baseUrl}}/modules/:id"
+                    }
+                }
+            ]
         }
     ]
 }

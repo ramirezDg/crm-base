@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from '../../app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ModulesUser } from '../../modules/entities/module.entity';
+import { ModulesUser } from '../../api/modules/entities/module.entity';
+import { AppModule } from '../../app.module';
 
 export async function seedModulesFromTables() {
   const app = await NestFactory.createApplicationContext(AppModule);
