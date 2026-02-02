@@ -19,6 +19,6 @@ export class CreateUserDto {
     description: 'User password (min 6 characters)',
   })
   @IsString()
-  @MinLength(6)
+  @MinLength(6)Q
   password: string;
 }

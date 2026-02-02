@@ -1,3 +1,4 @@
+import { MailerModule } from './common/mailer/mailer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -22,6 +23,7 @@ import { UsersModule } from './api/users/users.module';
 
 @Module({
   imports: [
+    MailerModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -53,6 +55,7 @@ import { UsersModule } from './api/users/users.module';
     ErrorLogsModule,
     FilesModule,
     ModulesModule,
+    MailerModule,
   ],
   controllers: [],
   providers: [

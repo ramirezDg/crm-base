@@ -7,17 +7,29 @@ import { IsNull, Repository } from 'typeorm';
 import { PaginationParamsDto } from '../../common/dto/pagination-params.dto';
 import { PaginatedDto } from '../../common/dto/paginated.dto';
 import { SearchUserDto } from './dto/search-user.dto';
+import { MailerService } from '../../common/mailer/mailer.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
+    private readonly mailerService: MailerService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     const user = this.usersRepository.create(createUserDto);
-    return await this.usersRepository.save(user);
+    const savedUser = await this.usersRepository.save(user);
+
+    await this.mailerService.sendMail(
+      savedUser.email,
+      'Bienvenido a la plataforma',
+      'Su cuenta ha sido creada exitosamente.',
+      'Registro',
+      `<b>Bienvenido, ${savedUser.name || ''} ${savedUser.lastName || ''}!</b><br>Su cuenta ha sido creada.`,
+    );
+
+    return savedUser;
   }
 
   async findOneByEmail(email: string, options?: { relations?: string[] }) {
