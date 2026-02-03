@@ -46,7 +46,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       userId = (request.user as any).id;
     }
 
-    // Guardar información adicional en context
     const context = {
       path: request.url,
       method: request.method,
@@ -58,13 +57,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
       headers: request.headers,
     };
 
-    await this.errorLogsService.create({
-      message,
-      stack,
-      type,
-      userId,
-      context,
-    });
+    try {
+      await this.errorLogsService.create({
+        message,
+        stack,
+        type,
+        userId,
+        context,
+      });
+    } catch (logError) {
+      console.error('Error al guardar el log de error:', logError);
+    }
 
     response.status(status).json({
       statusCode: status,

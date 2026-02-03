@@ -55,8 +55,6 @@ export class AuthService {
     };
   }
 
-  // Elimina updateRthashToken, ya no se usa en users
-
   async register({
     password,
     email,
@@ -79,7 +77,6 @@ export class AuthService {
     });
 
     const tokens = await this.getTokens(newUser.id, newUser.email);
-    // Guarda el refresh token en la sesión
     const hashedRefreshToken = await bcryptjs.hash(tokens.refreshToken, 10);
     await this.sessionsService.create({
       user: newUser.id,
