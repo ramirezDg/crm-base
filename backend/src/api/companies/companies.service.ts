@@ -90,7 +90,6 @@ export class CompaniesService {
   }
 
   async remove(id: string) {
-    await this.companiesRepository.update(id, { deletedAt: new Date() });
-    return this.companiesRepository.findOne({ where: { id } });
+    await this.companiesRepository.softDelete(id);
   }
 }

@@ -89,10 +89,6 @@ export class PermissionsService {
   }
 
   remove(id: string) {
-    return this.permissionRepository
-      .update(id, { deletedAt: new Date() })
-      .then(() => {
-        return this.permissionRepository.findOne({ where: { id } });
-      });
+    return this.permissionRepository.softDelete(id);
   }
 }

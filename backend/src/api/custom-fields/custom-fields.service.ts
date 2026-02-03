@@ -57,7 +57,6 @@ export class CustomFieldsService {
   }
 
   async remove(id: string) {
-    await this.customFieldRepository.update(id, { deletedAt: new Date() });
-    return this.customFieldRepository.findOne({ where: { id } });
+    return await this.customFieldRepository.softDelete(id);
   }
 }

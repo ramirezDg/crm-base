@@ -62,10 +62,6 @@ export class CustomFieldValuesService {
   }
 
   async remove(id: string) {
-    return await this.customFieldValueRepository
-      .update(id, { deletedAt: new Date() })
-      .then(() => {
-        return this.customFieldValueRepository.findOne({ where: { id } });
-      });
+    return await this.customFieldValueRepository.softDelete(id);
   }
 }

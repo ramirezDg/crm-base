@@ -94,7 +94,6 @@ export class ClientsService {
   }
 
   async remove(id: string) {
-    await this.clientsRepository.update(id, { deletedAt: new Date() });
-    return this.clientsRepository.findOne({ where: { id } });
+    await this.clientsRepository.softDelete(id);
   }
 }

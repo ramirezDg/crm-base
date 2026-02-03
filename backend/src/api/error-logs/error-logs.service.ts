@@ -34,6 +34,6 @@ export class ErrorLogsService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.errorLogRepository.delete(id);
+    await this.errorLogRepository.softDelete(id);
   }
 }

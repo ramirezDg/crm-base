@@ -45,10 +45,6 @@ export class RolesService {
   }
 
   remove(id: string) {
-    return this.rolesRepository
-      .update(id, { deletedAt: new Date() })
-      .then(() => {
-        return this.rolesRepository.findOne({ where: { id } });
-      });
+    return this.rolesRepository.softDelete(id);
   }
 }

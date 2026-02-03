@@ -117,7 +117,6 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    await this.usersRepository.update(id, { deletedAt: new Date() });
-    return this.usersRepository.findOne({ where: { id } });
+    await this.usersRepository.softDelete(id);
   }
 }

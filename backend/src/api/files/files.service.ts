@@ -54,10 +54,6 @@ export class FilesService {
   }
 
   remove(id: string) {
-    return this.filesRepository
-      .update(id, { deletedAt: new Date() })
-      .then(() => {
-        return this.filesRepository.findOne({ where: { id } });
-      });
+    return this.filesRepository.softDelete(id);
   }
 }

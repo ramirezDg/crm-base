@@ -101,7 +101,6 @@ export class EntityDefinitionsService {
   }
 
   async remove(id: string) {
-    await this.entityDefinitionRepository.update(id, { deletedAt: new Date() });
-    return this.entityDefinitionRepository.findOne({ where: { id } });
+    await this.entityDefinitionRepository.softDelete(id);
   }
 }

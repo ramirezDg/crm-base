@@ -53,6 +53,6 @@ export class EntitiesService {
   }
 
   remove(id: string) {
-    return this.entitiesRepository.update(id, { deletedAt: new Date() });
+    return this.entitiesRepository.softDelete(id);
   }
 }

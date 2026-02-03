@@ -52,10 +52,6 @@ export class ModulesService {
   }
 
   async remove(id: string) {
-    return await this.modulesRepository
-      .update(id, { deletedAt: new Date() })
-      .then(() => {
-        return this.findOne(id);
-      });
+    return await this.modulesRepository.softDelete(id);
   }
 }
