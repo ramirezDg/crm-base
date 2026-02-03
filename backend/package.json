@@ -1,8 +1,8 @@
 {
   "name": "crm_backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Backend CRM para gestión de clientes, empresas y usuarios, desarrollado con NestJS y TypeORM.",
+  "author": "ramirezDg",
   "private": true,
   "license": "MIT",
   "scripts": {
