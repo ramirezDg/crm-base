@@ -93,7 +93,7 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('should login and create session', async () => {
+    it('should login and return tokens (la sesión se crea por el interceptor, no por el AuthService)', async () => {
       mockUsersService.findOneByEmail.mockResolvedValue({
         id: '1',
         email: 'test@mail.com',
@@ -109,7 +109,6 @@ describe('AuthService', () => {
       mockJwtService.signAsync
         .mockResolvedValueOnce('access_token')
         .mockResolvedValueOnce('refresh_token');
-      mockSessionsService.create.mockResolvedValue({});
       mockConfigService.get.mockReturnValue('secret');
 
       const result = await service.login({
@@ -118,7 +117,8 @@ describe('AuthService', () => {
       });
       expect(result).toHaveProperty('accessToken');
       expect(result).toHaveProperty('refreshToken');
-      expect(mockSessionsService.create).toHaveBeenCalled();
+      // Nota: La sesión se crea por el SessionInterceptor, no por el AuthService directamente
+      // Por eso no se espera la llamada a mockSessionsService.create aquí
     });
     it('should throw if user not found', async () => {
       mockUsersService.findOneByEmail.mockResolvedValue(undefined);
