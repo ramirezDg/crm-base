@@ -7,9 +7,11 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 import { Role } from '../../roles/entities/role.entity';
+import { Session } from '../../sessions/entities/session.entity';
 
 @Entity()
 export class Users {
@@ -28,8 +30,8 @@ export class Users {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ type: 'text', nullable: true })
-  hashedRt?: string | null;
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Session[];
 
   @ManyToOne(() => Role)
   @JoinColumn({ name: 'roleId' })

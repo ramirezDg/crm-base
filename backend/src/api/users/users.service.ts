@@ -8,6 +8,7 @@ import { PaginationParamsDto } from '../../common/dto/pagination-params.dto';
 import { PaginatedDto } from '../../common/dto/paginated.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 import { MailerService } from '../../common/mailer/mailer.service';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,11 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = this.usersRepository.create(createUserDto);
+    const hashPass = await bcryptjs.hash(createUserDto.password, 10);
+    const user = this.usersRepository.create({
+      ...createUserDto,
+      password: hashPass,
+    });
     const savedUser = await this.usersRepository.save(user);
 
     await this.mailerService.sendMail(

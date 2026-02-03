@@ -5,4 +5,5 @@ export type JwtPayload = {
   accessToken: string;
   refreshToken: string;
   permissions?: string[];
+  company?: string | null;
 };

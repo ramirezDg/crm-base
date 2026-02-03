@@ -7,6 +7,7 @@ import {
   Res,
   UseGuards,
   Response as NestResponse,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
@@ -26,6 +27,7 @@ import {
   ApiResponse,
   ApiBody,
 } from '@nestjs/swagger';
+import { SessionInterceptor } from '../../common/interceptors/session.interceptor';
 
 @ApiTags('Auth')
 @ApiCookieAuth()
@@ -50,6 +52,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @Public()
+  @UseInterceptors(SessionInterceptor)
   @ApiOperation({ summary: 'Login a user' })
   @ApiResponse({
     status: 200,

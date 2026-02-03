@@ -8,10 +8,13 @@ import { RolePermission } from '../role-permissions/entities/role-permission.ent
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AtStrategy } from './strategies/jwt-strategy';
 import { RtStrategy } from './strategies/jwt-strategy/rt.strategy';
+import { SessionsModule } from '../sessions/sessions.module';
+import { SessionInterceptor } from '../../common/interceptors/session.interceptor';
 
 @Module({
   imports: [
     UsersModule,
+    SessionsModule,
     TypeOrmModule.forFeature([RolePermission]),
     JwtModule.register({
       secret: jwtConstants.secret,
@@ -19,6 +22,6 @@ import { RtStrategy } from './strategies/jwt-strategy/rt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AtStrategy, RtStrategy],
+  providers: [AuthService, AtStrategy, RtStrategy, SessionInterceptor],
 })
 export class AuthModule {}

@@ -20,6 +20,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { FilesModule } from './api/files/files.module';
 import { ModulesModule } from './api/modules/modules.module';
 import { UsersModule } from './api/users/users.module';
+import { SessionsModule } from './api/sessions/sessions.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { UsersModule } from './api/users/users.module';
     FilesModule,
     ModulesModule,
     MailerModule,
+    SessionsModule,
   ],
   controllers: [],
   providers: [
