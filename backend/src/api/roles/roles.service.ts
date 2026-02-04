@@ -34,6 +34,10 @@ export class RolesService {
     };
   }
 
+  findRoleDefault() {
+    return this.rolesRepository.findOne({ where: { default: true, deletedAt: IsNull() } });
+  }
+
   findOne(id: string) {
     return this.rolesRepository.findOne({ where: { id, deletedAt: IsNull() } });
   }

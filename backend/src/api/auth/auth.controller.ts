@@ -8,6 +8,7 @@ import {
   UseGuards,
   Response as NestResponse,
   UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
@@ -45,7 +46,7 @@ export class AuthController {
     type: Object,
   })
   @ApiBody({ type: RegisterDto })
-  register(@Body() registerDto: RegisterDto): Promise<Tokens> {
+  register(@Body() registerDto: RegisterDto): Promise<{ message: string }> {
     return this.authService.register(registerDto);
   }
 

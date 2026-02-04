@@ -10,11 +10,13 @@ import { AtStrategy } from './strategies/jwt-strategy';
 import { RtStrategy } from './strategies/jwt-strategy/rt.strategy';
 import { SessionsModule } from '../sessions/sessions.module';
 import { SessionInterceptor } from '../../common/interceptors/session.interceptor';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
   imports: [
     UsersModule,
     SessionsModule,
+    RolesModule,
     TypeOrmModule.forFeature([RolePermission]),
     JwtModule.register({
       secret: jwtConstants.secret,

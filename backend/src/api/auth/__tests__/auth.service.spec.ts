@@ -7,6 +7,8 @@ import * as bcryptjs from 'bcryptjs';
 import { UsersService } from '../../users/users.service';
 import { SessionsService } from '../../sessions/sessions.service';
 import { RolePermission } from '../../role-permissions/entities/role-permission.entity';
+import { MailerService } from '../../../common/mailer/mailer.service';
+import { RolesService } from '../../roles/roles.service';
 
 const mockUsersService = {
   findOneByEmail: jest.fn(),
@@ -25,8 +27,17 @@ const mockSessionsService = {
   findOne: jest.fn(),
   update: jest.fn(),
 };
+
 const mockRolePermissionRepository = {
   find: jest.fn(),
+};
+
+const mockMailerService = {
+  sendMail: jest.fn(),
+};
+
+const mockRolesService = {
+  findRoleDefault: jest.fn(),
 };
 
 describe('AuthService', () => {
@@ -46,6 +57,8 @@ describe('AuthService', () => {
         { provide: JwtService, useValue: mockJwtService },
         { provide: ConfigService, useValue: mockConfigService },
         { provide: SessionsService, useValue: mockSessionsService },
+        { provide: MailerService, useValue: mockMailerService },
+        { provide: RolesService, useValue: mockRolesService },
         {
           provide: getRepositoryToken(RolePermission),
           useValue: mockRolePermissionRepository,
@@ -67,6 +80,10 @@ describe('AuthService', () => {
         .mockResolvedValueOnce('refresh');
       mockSessionsService.create.mockResolvedValue({});
       mockConfigService.get.mockReturnValue('secret');
+
+      mockRolesService.findRoleDefault.mockResolvedValue({
+        id: 'default-role-id',
+      });
 
       const result = await service.register({
         name: 'Test',
@@ -189,21 +206,12 @@ describe('AuthService', () => {
     });
   });
 
-  // Additional tests for AuthService
-
   describe('getTokens', () => {
     it('should generate access and refresh tokens', async () => {
       mockJwtService.signAsync
         .mockResolvedValueOnce('access_token')
         .mockResolvedValueOnce('refresh_token');
       mockConfigService.get.mockReturnValue('jwt_secret');
-      const service: AuthService = new AuthService(
-        mockUsersService as any,
-        mockJwtService as any,
-        mockConfigService as any,
-        mockRolePermissionRepository as any,
-        mockSessionsService as any,
-      );
       const tokens = await service.getTokens('userId', 'user@mail.com');
       expect(tokens).toEqual({
         accessToken: 'access_token',

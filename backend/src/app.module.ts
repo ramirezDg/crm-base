@@ -62,10 +62,10 @@ import { SessionsModule } from './api/sessions/sessions.module';
   controllers: [],
   providers: [
     ActivityLogInterceptor,
-    /* {
+    {
       provide: 'APP_GUARD',
       useClass: AtGuard,
-    }, */
+    },
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,

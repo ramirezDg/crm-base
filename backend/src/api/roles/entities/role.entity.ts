@@ -20,6 +20,9 @@ export class Role {
   @Column({ type: 'text', nullable: true })
   description: string;
 
+  @Column({ default: null, nullable: true })
+  default: boolean;
+
   @ManyToOne(() => Company)
   company: Company;
 

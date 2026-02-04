@@ -16,6 +16,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RolePermission } from '../role-permissions/entities/role-permission.entity';
 import { Repository } from 'typeorm';
 import { SessionsService } from '../sessions/sessions.service';
+import { MailerService } from '../../common/mailer/mailer.service';
+import { RolesService } from '../roles/roles.service';
 @Injectable()
 export class AuthService {
   constructor(
@@ -25,6 +27,8 @@ export class AuthService {
     @InjectRepository(RolePermission)
     private readonly rolePermissionRepository: Repository<RolePermission>,
     private readonly sessionsService: SessionsService,
+    private readonly mailerService: MailerService,
+    private readonly rolesService: RolesService,
   ) {}
 
   async getTokens(id: string, email: string) {
@@ -60,33 +64,29 @@ export class AuthService {
     email,
     name,
     lastName,
-  }: RegisterDto): Promise<Tokens> {
+  }: RegisterDto): Promise<{ message: string }> {
     const user = await this.usersService.findOneByEmail(email);
-
     if (user) {
       throw new BadRequestException('Email already exists');
     }
 
-    const hashedPassword = await bcryptjs.hash(password, 10);
+    const [hashedPassword, roleDefault] = await Promise.all([
+      bcryptjs.hash(password, 10),
+      this.rolesService.findRoleDefault(),
+    ]);
+    if (!roleDefault) {
+      throw new BadRequestException('Default role not found');
+    }
 
-    const newUser = await this.usersService.create({
+    await this.usersService.create({
       name,
       lastName,
       email,
       password: hashedPassword,
+      role: roleDefault,
     });
 
-    const tokens = await this.getTokens(newUser.id, newUser.email);
-    const hashedRefreshToken = await bcryptjs.hash(tokens.refreshToken, 10);
-    await this.sessionsService.create({
-      user: newUser.id,
-      company: null,
-      jwt_token: tokens.accessToken,
-      hashedRt: hashedRefreshToken,
-      expires_at: new Date(Date.now() + 2 * 60 * 60 * 1000),
-    });
-
-    return tokens;
+    return { message: 'Usuario registrado correctamente' };
   }
 
   async login({ email, password }: LoginDto): Promise<JwtPayload> {
@@ -177,5 +177,25 @@ export class AuthService {
     });
 
     return tokens;
+  }
+
+  async recoverPassword(email: string) {
+    const user = await this.usersService.findOneByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const tempPassword = Math.random().toString(36).slice(-8);
+    const hashedTempPassword = await bcryptjs.hash(tempPassword, 10);
+    await this.usersService.update(user.id, { password: hashedTempPassword });
+
+    await this.mailerService.sendMail(
+      user.email,
+      'Recuperación de contraseña',
+      'Se ha generado una nueva contraseña temporal para su cuenta.',
+      'Recuperación de contraseña',
+      `<b>Hola, ${user.name || ''} ${user.lastName || ''}!</b><br>Su nueva contraseña temporal es: <b>${tempPassword}</b><br>Por favor, cambie su contraseña después de iniciar sesión.`,
+    );
+    return true;
   }
 }

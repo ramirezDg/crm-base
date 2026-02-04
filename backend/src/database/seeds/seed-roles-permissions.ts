@@ -121,9 +121,10 @@ export async function seedRolesAndPermissions(app: INestApplicationContext) {
     });
     if (!role) {
       role = roleRepo.create({
-        name,
-        description: `Rol de ${name}`,
-        company: company,
+      name,
+      description: `Rol de ${name}`,
+      company: company,
+      ...(name === 'User' ? { default: true } : {}),
       });
       await roleRepo.save(role);
     }

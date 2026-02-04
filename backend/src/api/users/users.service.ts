@@ -109,11 +109,59 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    return this.usersRepository.update(id, updateUserDto).then(() => {
-      return this.usersRepository.findOne({
-        where: { id },
-      });
-    });
+    const userBefore = await this.usersRepository.findOne({ where: { id } });
+    await this.usersRepository.update(id, updateUserDto);
+    const userAfter = await this.usersRepository.findOne({ where: { id } });
+
+    if (updateUserDto.email && updateUserDto.email !== userBefore?.email) {
+      await this.mailerService.sendMail(
+        updateUserDto.email,
+        'Correo actualizado',
+        'Su correo electrónico ha sido actualizado correctamente.',
+        'Actualización de correo',
+        `<b>Hola, ${userAfter?.name || ''} ${userAfter?.lastName || ''}!</b><br>Su correo electrónico ha sido actualizado.`,
+      );
+    }
+
+    if (updateUserDto.password && userAfter?.email) {
+      await this.mailerService.sendMail(
+        userAfter.email,
+        'Contraseña actualizada',
+        'Su contraseña ha sido modificada correctamente.',
+        'Actualización de contraseña',
+        `<b>Hola, ${userAfter?.name || ''} ${userAfter?.lastName || ''}!</b><br>Su contraseña ha sido actualizada.`,
+      );
+    }
+
+    if (
+      updateUserDto.role?.id &&
+      updateUserDto.role?.id !== (userBefore as any)?.roleId &&
+      userAfter?.email
+    ) {
+      await this.mailerService.sendMail(
+        userAfter.email,
+        'Rol actualizado',
+        'Su rol ha sido actualizado correctamente.',
+        'Actualización de rol',
+        `<b>Hola, ${userAfter?.name || ''} ${userAfter?.lastName || ''}!</b><br>Su rol ha sido actualizado.`,
+      );
+    }
+
+    if (
+      updateUserDto.company?.id &&
+      updateUserDto.company?.id !== (userBefore as any)?.companyId &&
+      userAfter?.email
+    ) {
+      await this.mailerService.sendMail(
+        userAfter.email,
+        'Compañía actualizada',
+        'Su compañía ha sido actualizada correctamente.',
+        'Actualización de compañía',
+        `<b>Hola, ${userAfter?.name || ''} ${userAfter?.lastName || ''}!</b><br>Su compañía ha sido actualizada.`,
+      );
+    }
+
+    return userAfter;
   }
 
   async remove(id: string) {

@@ -4,6 +4,7 @@ import { UpdateSessionDto } from './dto/update-session.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Session } from './entities/session.entity';
 import { IsNull, Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class SessionsService {
@@ -19,14 +20,29 @@ export class SessionsService {
 
   async findAll() {
     return await this.sessionRepository.find({
-      where: { created_at: IsNull() },
+      where: { deleted_at: IsNull() },
     });
   }
 
   async findOne(id: string) {
     return await this.sessionRepository.findOne({
-      where: { id, created_at: IsNull() },
+      where: { id, deleted_at: IsNull() },
     });
+  }
+
+  async findActiveSession(jwt: string) {
+    const sessions = await this.sessionRepository.find({
+      where: { deleted_at: IsNull() },
+    });
+
+    console.log('Searching for active session with JWT:', jwt);
+    for (const session of sessions) {
+      if (await bcrypt.compare(jwt, session.hashedAt)) {
+        console.log('Found active session:', session);
+        return session;
+      }
+    }
+    return null;
   }
 
   async update(id: string, updateSessionDto: UpdateSessionDto) {

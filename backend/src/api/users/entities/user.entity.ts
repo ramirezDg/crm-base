@@ -37,7 +37,7 @@ export class Users {
   @JoinColumn({ name: 'roleId' })
   role: Role;
 
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, { nullable: true })
   @JoinColumn({ name: 'companyId' })
   company: Company;
 
