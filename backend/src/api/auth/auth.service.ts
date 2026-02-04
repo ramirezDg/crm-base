@@ -59,15 +59,22 @@ export class AuthService {
     };
   }
 
-  async register({
-    password,
-    email,
-    name,
-    lastName,
-  }: RegisterDto): Promise<{ message: string }> {
+  async register(
+    registerDto: RegisterDto,
+    at: string,
+  ): Promise<{ message: string }> {
+    const { name, lastName, email, password } = registerDto;
+
     const user = await this.usersService.findOneByEmail(email);
+    const session = await this.sessionsService.findActiveSession(at);
+    if (at === '') {
+      throw new BadRequestException('Token is required');
+    }
     if (user) {
       throw new BadRequestException('Email already exists');
+    }
+    if (session === null || session === undefined) {
+      throw new BadRequestException('Active session already exists for token');
     }
 
     const [hashedPassword, roleDefault] = await Promise.all([
@@ -78,12 +85,15 @@ export class AuthService {
       throw new BadRequestException('Default role not found');
     }
 
+    console.log('session', session);
+
     await this.usersService.create({
       name,
       lastName,
       email,
       password: hashedPassword,
       role: roleDefault,
+      company: session.company,
     });
 
     return { message: 'Usuario registrado correctamente' };

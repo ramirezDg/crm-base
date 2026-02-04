@@ -46,8 +46,20 @@ export class AuthController {
     type: Object,
   })
   @ApiBody({ type: RegisterDto })
-  register(@Body() registerDto: RegisterDto): Promise<{ message: string }> {
-    return this.authService.register(registerDto);
+  register(
+    @Body() registerDto: RegisterDto,
+    @Req() req: Request,
+  ): Promise<{ message: string }> {
+    const authHeader = req.headers['authorization'];
+    let token: string | undefined;
+    if (
+      authHeader &&
+      typeof authHeader === 'string' &&
+      authHeader.startsWith('Bearer ')
+    ) {
+      token = authHeader.split(' ')[1];
+    }
+    return this.authService.register(registerDto, token ?? '');
   }
 
   @Post('login')

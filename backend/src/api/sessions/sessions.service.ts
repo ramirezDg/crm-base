@@ -33,9 +33,9 @@ export class SessionsService {
   async findActiveSession(jwt: string) {
     const sessions = await this.sessionRepository.find({
       where: { deleted_at: IsNull() },
+      relations: ['company'],
     });
 
-    console.log('Searching for active session with JWT:', jwt);
     for (const session of sessions) {
       if (await bcrypt.compare(jwt, session.hashedAt)) {
         console.log('Found active session:', session);
