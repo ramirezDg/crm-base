@@ -38,7 +38,6 @@ export class SessionsService {
 
     for (const session of sessions) {
       if (await bcrypt.compare(jwt, session.hashedAt)) {
-        console.log('Found active session:', session);
         return session;
       }
     }

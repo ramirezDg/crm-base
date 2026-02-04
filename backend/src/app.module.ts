@@ -1,6 +1,7 @@
 import { MailerModule } from './common/mailer/mailer.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { RouterModule } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './api/auth/auth.module';
 import { CompaniesModule } from './api/companies/companies.module';
@@ -21,10 +22,10 @@ import { FilesModule } from './api/files/files.module';
 import { ModulesModule } from './api/modules/modules.module';
 import { UsersModule } from './api/users/users.module';
 import { SessionsModule } from './api/sessions/sessions.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
-    MailerModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -42,22 +43,51 @@ import { SessionsModule } from './api/sessions/sessions.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
       }),
     }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60,
+          limit: 5,
+        },
+      ],
+    }),
+    MailerModule,
     UsersModule,
     AuthModule,
     CompaniesModule,
     RolesModule,
     PermissionsModule,
-    RolePermissionsModule,
     ClientsModule,
-    EntityDefinitionsModule,
-    ActivityLogsModule,
-    CustomFieldValuesModule,
-    EntitiesModule,
-    ErrorLogsModule,
-    FilesModule,
-    ModulesModule,
     MailerModule,
     SessionsModule,
+    ActivityLogsModule,
+    ErrorLogsModule,
+    RouterModule.register([
+      {
+        path: 'role-permissions',
+        module: RolePermissionsModule,
+      },
+      {
+        path: 'entity-definitions',
+        module: EntityDefinitionsModule,
+      },
+      {
+        path: 'custom-field-values',
+        module: CustomFieldValuesModule,
+      },
+      {
+        path: 'entities',
+        module: EntitiesModule,
+      },
+      {
+        path: 'files',
+        module: FilesModule,
+      },
+      {
+        path: 'modules',
+        module: ModulesModule,
+      },
+    ]),
   ],
   controllers: [],
   providers: [

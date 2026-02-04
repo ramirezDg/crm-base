@@ -29,10 +29,12 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { SessionInterceptor } from '../../common/interceptors/session.interceptor';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @ApiTags('Auth')
 @ApiCookieAuth()
 @Controller('auth')
+@UseGuards(ThrottlerGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

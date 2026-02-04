@@ -84,9 +84,6 @@ export class AuthService {
     if (!roleDefault) {
       throw new BadRequestException('Default role not found');
     }
-
-    console.log('session', session);
-
     await this.usersService.create({
       name,
       lastName,
