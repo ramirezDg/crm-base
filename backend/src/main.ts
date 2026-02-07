@@ -11,10 +11,13 @@ async function bootstrap() {
 
 
   app.setGlobalPrefix('api/v1');
-  
+
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
+
+  app.setGlobalPrefix('api/v1');
+  
   app.useGlobalInterceptors(app.get(ActivityLogInterceptor));
 
   app.useGlobalPipes(
@@ -35,6 +38,7 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
-  await app.listen(process.env.PORT || 3000);
+  //Comenta para dejar crear las tablas y luego descomenta para evitar que se creen cada vez
+  await app.listen(process.env.PORT || 3000); 
 }
 bootstrap();
