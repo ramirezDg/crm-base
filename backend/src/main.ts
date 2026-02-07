@@ -9,10 +9,11 @@ import { ActivityLogInterceptor } from './common/interceptors/activity-log.inter
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
 
   app.setGlobalPrefix('api/v1');
+  
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
 
   app.useGlobalInterceptors(app.get(ActivityLogInterceptor));
 
