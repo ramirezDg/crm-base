@@ -6,21 +6,19 @@ import {
   Post,
   Res,
   UseGuards,
-  Response as NestResponse,
   UseInterceptors,
   Req,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { RegisterDto } from './dto/register-auth.dto';
-import { LoginDto } from './dto/login-auth.dto';
-import { JwtPayload, Tokens } from './types';
+import { RegisterDto } from '../../aplication/dto/register-auth.dto';
+import { LoginDto } from '../../aplication/dto/login-auth.dto';
+import { JwtPayload } from '../../domain/types';
 import {
   GetCurrentUser,
   GetCurrentUserId,
   Public,
-} from '../../common/decorators';
-import { RtGuard } from '../../common/guards/rt.guard';
+} from '../../../../common/decorators';
+import { RtGuard } from '../../../../common/guards/rt.guard';
 import {
   ApiCookieAuth,
   ApiTags,
@@ -28,15 +26,24 @@ import {
   ApiResponse,
   ApiBody,
 } from '@nestjs/swagger';
-import { SessionInterceptor } from '../../common/interceptors/session.interceptor';
+import { SessionInterceptor } from '../../../../common/interceptors/session.interceptor';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { RegisterUseCase } from '../../aplication/use-cases/register.usecase';
+import { LoginUseCase } from '../../aplication/use-cases/login.usecase';
+import { LogoutUseCase } from '../../aplication/use-cases/logout.usecase';
+import { RefreshTokenUseCase } from '../../aplication/use-cases/refresh-token.usecase';
 
 @ApiTags('Auth')
 @ApiCookieAuth()
 @Controller('auth')
 @UseGuards(ThrottlerGuard)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly registerUseCase: RegisterUseCase,
+    private readonly loginUseCase: LoginUseCase,
+    private readonly logoutUseCase: LogoutUseCase,
+    private readonly refreshTokenUseCase: RefreshTokenUseCase,
+  ) {}
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -48,20 +55,13 @@ export class AuthController {
     type: Object,
   })
   @ApiBody({ type: RegisterDto })
-  register(
-    @Body() registerDto: RegisterDto,
-    @Req() req: Request,
-  ): Promise<{ message: string }> {
+  register(@Body() registerDto: RegisterDto, @Req() req: Request) {
     const authHeader = req.headers['authorization'];
     let token: string | undefined;
-    if (
-      authHeader &&
-      typeof authHeader === 'string' &&
-      authHeader.startsWith('Bearer ')
-    ) {
+    if (authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     }
-    return this.authService.register(registerDto, token ?? '');
+    return this.registerUseCase.execute(registerDto, token ?? '');
   }
 
   @Post('login')
@@ -75,11 +75,8 @@ export class AuthController {
     type: Object,
   })
   @ApiBody({ type: LoginDto })
-  async login(
-    @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<JwtPayload> {
-    return await this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response): Promise<JwtPayload> {
+    return await this.loginUseCase.execute(loginDto);
   }
 
   @Post('logout')
@@ -87,7 +84,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Logout a user' })
   @ApiResponse({ status: 200, description: 'User logged out successfully' })
   logout(@GetCurrentUserId('sub') id: string) {
-    return this.authService.logout(id);
+    return this.logoutUseCase.execute(id);
   }
 
   @Post('refresh')
@@ -99,10 +96,7 @@ export class AuthController {
     description: 'Tokens refreshed successfully',
     type: Object,
   })
-  refresh(
-    @GetCurrentUserId('sub') id: string,
-    @GetCurrentUser('refreshToken') refreshToken: string,
-  ) {
-    return this.authService.refresh(id, refreshToken);
+  refresh(@GetCurrentUserId('sub') id: string, @GetCurrentUser('refreshToken') refreshToken: string) {
+    return this.refreshTokenUseCase.execute(id, refreshToken);
   }
 }

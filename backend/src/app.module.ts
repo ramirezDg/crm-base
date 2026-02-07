@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from './api/auth/auth.module';
+import { AuthModule } from './api/auth/infraestructure/auth.module';
 import { CompaniesModule } from './api/companies/companies.module';
 import { RolesModule } from './api/roles/roles.module';
 import { PermissionsModule } from './api/permissions/permissions.module';
